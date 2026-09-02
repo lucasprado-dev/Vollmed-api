@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: api
+
+  # Faz o Jackson aceitar enums sem diferenciar maiúsculas de minúsculas
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
+  # Conexão com o banco de dados
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost/vollmed_api}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+#  # Habilitar logs do banco
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
