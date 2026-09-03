@@ -1,10 +1,11 @@
-package med.voll.api.model;
+package med.voll.api.domain.medico;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
-import med.voll.api.dto.DadosAtualizacaoMedicoDto;
-import med.voll.api.dto.DadosCadastroMedicoDto;
+import med.voll.api.domain.medico.dto.DadosAtualizacaoMedicoDto;
+import med.voll.api.domain.medico.dto.DadosCadastroMedicoDto;
+import med.voll.api.domain.endereco.Endereco;
 
 @Entity
 @Table(name = "medicos")
