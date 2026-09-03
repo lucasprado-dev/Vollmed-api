@@ -1,7 +1,7 @@
-package med.voll.api.dto;
+package med.voll.api.domain.medico.dto;
 
-import med.voll.api.model.Especialidade;
-import med.voll.api.model.Medico;
+import med.voll.api.domain.medico.Especialidade;
+import med.voll.api.domain.medico.Medico;
 
 public record DadosListagemMedicoDto(Long id,
                                      String nome,
