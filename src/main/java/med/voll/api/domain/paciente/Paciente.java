@@ -3,9 +3,13 @@ package med.voll.api.domain.paciente;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.paciente.dto.DadosAtualizacaoPacienteDto;
 import med.voll.api.domain.paciente.dto.DadosCadastroPacienteDto;
 import med.voll.api.domain.endereco.Endereco;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pacientes")
@@ -23,10 +27,14 @@ public class Paciente {
     private String telefone;
     private String cpf;
 
-    @Embedded // Indica que este campo é composto por uma classe anotada com @Embeddable, cujos atributos serão incorporados (achatados) como colunas na própria tabela desta entidade — não gera relacionamento nem tabela separada
+    @Embedded // Indica que este campo é composto por uma classe anotada com @Embeddable, cujos atributos serão incorporados
+              // (achatados) como colunas na própria tabela desta entidade — não gera relacionamento nem tabela separada
     private Endereco endereco;
 
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Consulta> consultas = new ArrayList<>();
 
     public Paciente(DadosCadastroPacienteDto dto) {
         this.nome = dto.nome();
