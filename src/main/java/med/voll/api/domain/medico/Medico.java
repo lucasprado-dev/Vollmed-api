@@ -3,9 +3,13 @@ package med.voll.api.domain.medico;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.medico.dto.DadosAtualizacaoMedicoDto;
 import med.voll.api.domain.medico.dto.DadosCadastroMedicoDto;
 import med.voll.api.domain.endereco.Endereco;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "medicos")
@@ -30,6 +34,9 @@ public class Medico {
     private Endereco endereco;
 
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "medico", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Consulta> consultas = new ArrayList<>();
 
     public Medico(DadosCadastroMedicoDto dto) {
         this.nome = dto.nome();
