@@ -11,11 +11,15 @@ import med.voll.api.domain.paciente.repository.PacienteRepository;
 import med.voll.api.infra.exception.ValidacaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Service
 public class ConsultaService {
+
+    private static final Logger log = LoggerFactory.getLogger(ConsultaService.class);
 
     @Autowired
     private ConsultaRepository consultaRepository;
@@ -31,9 +35,13 @@ public class ConsultaService {
 
     public DadosDetalhamentoConsultaDto agendar(DadosAgendamentoConsultaDto dto){
 
+        log.info("Iniciando agendamento: idPaciente={}, idMedico={}, especialidade={}, data={}",
+                dto.idPaciente(), dto.idMedico(), dto.especialidade(), dto.data());
+
         // Verificando se o id do paciente existe
         if (!pacienteRepository.existsById(dto.idPaciente())){
             // Se o paciente informado não existe no banco, interrompe o agendamento
+            log.warn("Agendamento recusado: paciente {} não existe", dto.idPaciente());
             throw new ValidacaoException("Id do paciente informado, não existe!");
         }
 
@@ -41,21 +49,27 @@ public class ConsultaService {
         if (dto.idMedico() != null && !medicoRepository.existsById(dto.idMedico())){
             // Só valida a existência do médico se um id foi passado;
             // se o médico informado não existe, interrompe o agendamento
+            log.warn("Agendamento recusado: médico {} não existe", dto.idMedico());
             throw new ValidacaoException("Id do medico informado, não existe!");
         }
 
         //Validações
         validacoes.forEach(v -> v.validar(dto));
+        log.debug("Validações concluídas para paciente {}", dto.idPaciente());
 
         var paciente = pacienteRepository.getReferenceById(dto.idPaciente());
         var medico = escolherMedico(dto);
 
         if (medico == null) {
+            log.warn("Sem médico disponível: especialidade={}, data={}", dto.especialidade(), dto.data());
             throw new ValidacaoException("Não existe médico disponivel nesta data");
         }
 
         var consulta = new Consulta(null, medico, paciente, dto.data());
         consultaRepository.save(consulta);
+
+        log.info("Consulta agendada: id={}, medico={}, paciente={}",
+                consulta.getId(), medico.getId(), paciente.getId());
 
         return new DadosDetalhamentoConsultaDto(consulta);
     }
@@ -69,6 +83,9 @@ public class ConsultaService {
         if (dto.especialidade() == null){
             throw new ValidacaoException("Especialidade é obrigatoria quando o médico não for passado");
         }
+
+        log.debug("Médico não informado, sorteando por especialidade={} na data={}",
+                dto.especialidade(), dto.data());
 
         // Escolhe aleatoriamente um médico livre naquela data e especialidade
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dto.especialidade(), dto.data());
