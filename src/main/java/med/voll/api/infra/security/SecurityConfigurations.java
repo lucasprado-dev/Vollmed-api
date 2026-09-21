@@ -51,6 +51,7 @@ public class SecurityConfigurations {
                                 // ⚠️ Se precisar liberar outras rotas futuramente (ex: /cadastro, /public/**),
                                 // adicione novos .requestMatchers(...).permitAll() ANTES do .anyRequest().authenticated().
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
 //                        .anyRequest().permitAll() // versão antiga: liberava tudo (só fase inicial/teste)
                 )
