@@ -34,7 +34,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 //   -> filtra apenas médicos que estão ativos no sistema
 
 // and m.especialidade = :especialidade
-//   -> filtra pela especialidade recebida como parâmetro do método
+//   -> filtra pela especialidade recebida como parâmetro do metodo
 
 // and m.id not in (...)
 //   -> subquery: pega os IDs de médicos que JÁ têm consulta
@@ -48,7 +48,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
 // limit 1
 //   -> pega só 1 resultado após o embaralhamento (o "sorteado")
-    Medico escolherMedicoAleatorioLivreNaData(Especialidade especialidade, @NotNull @Future LocalDateTime data);
+    Medico escolherMedicoAleatorioLivreNaData(Especialidade especialidade, LocalDateTime data);
 
     @Query("""
         select m.ativo
