@@ -8,8 +8,8 @@ spring:
 
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost/vollmed_api}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    username: root
+    password: 1234
 
   web:
     error:
