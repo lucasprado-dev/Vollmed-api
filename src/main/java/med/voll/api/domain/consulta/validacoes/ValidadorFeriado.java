@@ -1,7 +1,6 @@
 package med.voll.api.domain.consulta.validacoes;
 
 import med.voll.api.domain.consulta.dto.DadosAgendamentoConsultaDto;
-import med.voll.api.domain.medico.repository.MedicoRepository;
 import med.voll.api.infra.exception.ValidacaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,17 +9,12 @@ import org.springframework.stereotype.Component;
 public class ValidadorFeriado implements ValidadorAgendamentoDeConsulta {
 
     @Autowired
-    private MedicoRepository medicoRepository;
+    private CalendarioFeriados feriados;
 
-    public void validar(DadosAgendamentoConsultaDto dto){
-        //escolha do medico opcional
-        if(dto.idMedico() == null){
-            return;
-        }
-
-        var medicoEstaAtivo = medicoRepository.findAtivoById(dto.idMedico());
-        if (!medicoEstaAtivo) {
-            throw new ValidacaoException("Consulta não pode ser agendada com médico excluído");
+    public void validar(DadosAgendamentoConsultaDto dto) {
+        var dataConsulta = dto.data();
+        if (feriados.ehFeriado(dataConsulta.toLocalDate())) {
+            throw new ValidacaoException("Consulta não pode ser agendada em feriado");
         }
     }
 }

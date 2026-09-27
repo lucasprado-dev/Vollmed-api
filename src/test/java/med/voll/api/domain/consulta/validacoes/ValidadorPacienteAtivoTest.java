@@ -44,8 +44,7 @@ class ValidadorPacienteAtivoTest {
         when(pacienteRepository.findAtivoById(2L)).thenReturn(true);
         assertDoesNotThrow(() -> validador.validar(dto));
         /*
-        assertThrows(                        // "eu garanto que não vai dar erro..."
-        ValidacaoException.class,        // "...e o erro vai ser deste tipo..."
+        assertDoesNotThrow(                        // "eu garanto que não vai dar erro..."
         () -> validador.validar(dto)   // "...quando executar isto"
          */
     }
