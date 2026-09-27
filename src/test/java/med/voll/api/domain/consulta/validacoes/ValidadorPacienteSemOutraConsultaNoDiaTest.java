@@ -45,10 +45,9 @@ class ValidadorPacienteSemOutraConsultaNoDiaTest {
     @Test
     @DisplayName("Deveria lançar a exceção quando o paciente tiver uma consulta")
     void pacienteComConsulta() {
+        // Arrange
         var dto = new DadosAgendamentoConsultaDto(1L, 2L,
                 LocalDateTime.of(2026, 9, 28, 10, 30), null);
-
-        validador.validar(dto);
 
         when(repository.existsByPacienteIdAndDataBetween(
                 2L,
@@ -56,6 +55,7 @@ class ValidadorPacienteSemOutraConsultaNoDiaTest {
                 LocalDateTime.of(2026, 9, 28, 18, 0)
         )).thenReturn(true);
 
+        // Act + Assert
         assertThrows(ValidacaoException.class, () -> validador.validar(dto));
     }
 
